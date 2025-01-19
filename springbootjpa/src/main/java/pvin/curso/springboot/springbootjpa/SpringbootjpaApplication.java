@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.Transactional;
 import pvin.curso.springboot.springbootjpa.entities.Person;
 import pvin.curso.springboot.springbootjpa.repositories.PersonRepository;
 
 import java.util.List;
+import java.util.Scanner;
 
 @SpringBootApplication
 public class SpringbootjpaApplication implements CommandLineRunner {
@@ -60,15 +62,29 @@ public class SpringbootjpaApplication implements CommandLineRunner {
         create();
     }
 
+    @Transactional
+    public void create() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Nombre: ");
+        String name = scanner.nextLine();
+        System.out.print("Apellido: ");
+        String lastname = scanner.nextLine();
+        System.out.print("Lenguaje favorito: ");
+        String language = scanner.nextLine();
+        scanner.close();
+
+        Person person = repository.save(new Person(null, name, lastname, language));
+        System.out.println(person);
+        repository.findOneName(name).forEach(System.out::println);
+    }
+
+    @Transactional(readOnly = true)
     public void findOne(String name) {
         repository.findOneName(name).forEach(System.out::println);
     }
 
-    public void create(){
-        Person person = repository.save(new Person(null, "Kevin", "Carrillo", "Java"));
-        System.out.println(person);
-    }
-
+    @Transactional(readOnly = true)
     public void findOne(Long id) {
 //        Optional<Person> optionalPerson = repository.findById(id);
 //
