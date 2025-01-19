@@ -14,17 +14,33 @@ public class SpringbootjpaApplication implements CommandLineRunner {
     @Autowired
     private PersonRepository repository;
 
-
     public static void main(String[] args) {
         SpringApplication.run(SpringbootjpaApplication.class, args);
     }
 
+    private static int compareObject(Object[] a, Object[] b, int parameter) {
+        return ((String) b[parameter]).compareToIgnoreCase((String) a[parameter]);
+    }
+
     @Override
     public void run(String... args) throws Exception {
-//        List<Person> persons = (List<Person>) repository.findAll();
-//        List<Person> persons = (List<Person>) repository.findByProgrammingLanguage("Java");
-        List<Person> persons = (List<Person>) repository.buscarByProgrammingLanguage("C++","John");
+        List<Person> persons = repository.buscarByProgrammingLanguage("C++", "John");
+        List<Object[]> personsValues = repository.obtenerPersonDataByProgrammingLanguageAndName("Daniel", "Python");
+        List<Object[]> namesValues = repository.obtenerPersonDataByName("David");
+        personsValues.sort((a, b) -> compareObject(a, b, 0));
+        namesValues.sort((b, a) -> compareObject(a, b, 1));
 
+        System.out.println("--------------------------------------------------");
+        for (Object[] person : personsValues)
+            System.out.println(person[0] + " -> " + person[1]);
+
+        System.out.println("--------------------------------------------------");
+        for (Object[] person : namesValues)
+            System.out.println(person[0] + " es experto en " + person[1]);
+
+        System.out.println("--------------------------------------------------");
         persons.forEach(System.out::println);
+
+        System.out.println("--------------------------------------------------");
     }
 }
