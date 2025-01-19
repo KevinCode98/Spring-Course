@@ -8,6 +8,7 @@ import pvin.curso.springboot.springbootjpa.entities.Person;
 import pvin.curso.springboot.springbootjpa.repositories.PersonRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 public class SpringbootjpaApplication implements CommandLineRunner {
@@ -42,5 +43,20 @@ public class SpringbootjpaApplication implements CommandLineRunner {
         persons.forEach(System.out::println);
 
         System.out.println("--------------------------------------------------");
+
+        findOne(22L);
+        System.out.println("--------------------------------------------------");
+
+    }
+
+    public void findOne(Long id){
+//        Optional<Person> optionalPerson = repository.findById(id);
+//
+//        if(optionalPerson.isPresent())
+//            System.out.println(optionalPerson.get());
+//        else
+//            System.out.printf("La persona con el ID: %d no se encuentra en el sistema. :c%n", id);
+
+        repository.findById(id).ifPresent(System.out::println);
     }
 }
