@@ -1,0 +1,10 @@
+INSERT INTO persons (id, lastname, name, programming_language) VALUES (1, 'Smith', 'John', 'Python');
+INSERT INTO persons (id, lastname, name, programming_language) VALUES (2, 'Johnson', 'Emily', 'JavaScript');
+INSERT INTO persons (id, lastname, name, programming_language) VALUES (3, 'Brown', 'Michael', 'Java');
+INSERT INTO persons (id, lastname, name, programming_language) VALUES (4, 'Davis', 'Sarah', 'C#');
+INSERT INTO persons (id, lastname, name, programming_language) VALUES (5, 'Miller', 'David', 'Ruby');
+INSERT INTO persons (id, lastname, name, programming_language) VALUES (6, 'Wilson', 'Laura', 'Go');
+INSERT INTO persons (id, lastname, name, programming_language) VALUES (7, 'Moore', 'James', 'C++');
+INSERT INTO persons (id, lastname, name, programming_language) VALUES (8, 'Taylor', 'Sophia', 'PHP');
+INSERT INTO persons (id, lastname, name, programming_language) VALUES (9, 'Anderson', 'Daniel', 'Swift');
+INSERT INTO persons (id, lastname, name, programming_language) VALUES (10, 'Thomas', 'Olivia', 'Kotlin');
