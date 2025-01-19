@@ -1,12 +1,15 @@
 package com.pvin.springboot.id.app.springbootid.repositories;
 
 import com.pvin.springboot.id.app.springbootid.models.Product;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Repository
+//@RequestScope
+@Primary
+@Repository("productList")
 public class ProductRepositoryImpl implements IProductRepository {
     private final List<Product> data;
 
