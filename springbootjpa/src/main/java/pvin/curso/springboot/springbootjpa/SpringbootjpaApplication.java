@@ -9,6 +9,7 @@ import pvin.curso.springboot.springbootjpa.entities.Person;
 import pvin.curso.springboot.springbootjpa.repositories.PersonRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -58,8 +59,12 @@ public class SpringbootjpaApplication implements CommandLineRunner {
         System.out.println("---------------- Using findByNameContaining -> sending a String ------------------------");
         repository.findByNameContaining("mi").forEach(System.out::println);
 
-        System.out.println("---------------- Creating new Person ------------------------");
-        create();
+//        System.out.println("---------------- Creating new Person ------------------------");
+//        create();
+
+
+        System.out.println("---------------- Update Person ------------------------");
+        update();
     }
 
     @Transactional
@@ -77,6 +82,29 @@ public class SpringbootjpaApplication implements CommandLineRunner {
         Person person = repository.save(new Person(null, name, lastname, language));
         System.out.println(person);
         repository.findOneName(name).forEach(System.out::println);
+        scanner.close();
+    }
+
+    @Transactional
+    public void update() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Id del usuario que se modificara: ");
+        Long id = scanner.nextLong();
+
+        Optional<Person> person = repository.findById(id);
+
+        if (person.isPresent()) {
+            System.out.println(person.get());
+            System.out.print("Ingrese el nuevo lenguaje de programacion: ");
+            String language = scanner.next();
+            person.get().setProgrammingLanguage(language);
+            Person upadatePerson = repository.save(person.get());
+
+            System.out.println(upadatePerson);
+        } else {
+            System.out.println("El usuario no existe");
+        }
     }
 
     @Transactional(readOnly = true)
