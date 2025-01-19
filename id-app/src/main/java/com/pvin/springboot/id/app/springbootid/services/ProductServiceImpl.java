@@ -1,17 +1,17 @@
 package com.pvin.springboot.id.app.springbootid.services;
 
 import com.pvin.springboot.id.app.springbootid.models.Product;
-import com.pvin.springboot.id.app.springbootid.repositories.ProductRepositoryImpl;
+import com.pvin.springboot.id.app.springbootid.repositories.IProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class ProductServiceImpl implements IProductService {
     @Autowired
-    private ProductRepositoryImpl repository;
+    private IProductRepository repository;
 
     @Override
     public List<Product> findAll() {

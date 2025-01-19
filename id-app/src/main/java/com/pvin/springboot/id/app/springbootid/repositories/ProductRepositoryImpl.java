@@ -1,12 +1,12 @@
 package com.pvin.springboot.id.app.springbootid.repositories;
 
 import com.pvin.springboot.id.app.springbootid.models.Product;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+@Repository
 public class ProductRepositoryImpl implements IProductRepository {
     private final List<Product> data;
 
