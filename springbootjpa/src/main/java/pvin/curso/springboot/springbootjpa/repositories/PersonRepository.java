@@ -2,12 +2,27 @@ package pvin.curso.springboot.springbootjpa.repositories;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import pvin.curso.springboot.springbootjpa.entities.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PersonRepository extends CrudRepository<Person, Long> {
+    @Query("select p from Person p where p.id=:id")
+    Optional<Person> findOne(Long id);
+
+    @Query("select p from Person p where p.name=:name")
+    List<Optional<Person>> findOneName(String name);
+
     List<Person> findByProgrammingLanguage(String language);
+
+    @Query("select p from Person p where p.name like %:name% order by p.id asc")
+    List<Optional<Person>> findOneLikeName(String name);
+
+    List<Optional<Person>> findByNameContaining(String name);
+
+    List<Person> findByName(String name);
 
     @Query("select p from Person p where p.programmingLanguage=:language and p.name=:name")
     List<Person> buscarByProgrammingLanguage(String language, String name);

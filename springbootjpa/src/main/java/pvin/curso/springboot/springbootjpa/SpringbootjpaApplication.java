@@ -8,7 +8,6 @@ import pvin.curso.springboot.springbootjpa.entities.Person;
 import pvin.curso.springboot.springbootjpa.repositories.PersonRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootApplication
 public class SpringbootjpaApplication implements CommandLineRunner {
@@ -43,13 +42,34 @@ public class SpringbootjpaApplication implements CommandLineRunner {
         persons.forEach(System.out::println);
 
         System.out.println("--------------------------------------------------");
-
         findOne(22L);
-        System.out.println("--------------------------------------------------");
 
+        System.out.println("---------------- Using findOne -> sending a String ------------------------");
+        findOne("Daniel");
+
+        System.out.println("---------------- Using findByName -> sending a String ------------------------");
+        repository.findByName("Daniel").forEach(System.out::println);
+
+        System.out.println("---------------- Using findOneLikeName -> sending a String ------------------------");
+        repository.findOneLikeName("da").forEach(System.out::println);
+
+        System.out.println("---------------- Using findByNameContaining -> sending a String ------------------------");
+        repository.findByNameContaining("mi").forEach(System.out::println);
+
+        System.out.println("---------------- Creating new Person ------------------------");
+        create();
     }
 
-    public void findOne(Long id){
+    public void findOne(String name) {
+        repository.findOneName(name).forEach(System.out::println);
+    }
+
+    public void create(){
+        Person person = repository.save(new Person(null, "Kevin", "Carrillo", "Java"));
+        System.out.println(person);
+    }
+
+    public void findOne(Long id) {
 //        Optional<Person> optionalPerson = repository.findById(id);
 //
 //        if(optionalPerson.isPresent())
@@ -57,6 +77,6 @@ public class SpringbootjpaApplication implements CommandLineRunner {
 //        else
 //            System.out.printf("La persona con el ID: %d no se encuentra en el sistema. :c%n", id);
 
-        repository.findById(id).ifPresent(System.out::println);
+        repository.findOne(id).ifPresent(System.out::println);
     }
 }
