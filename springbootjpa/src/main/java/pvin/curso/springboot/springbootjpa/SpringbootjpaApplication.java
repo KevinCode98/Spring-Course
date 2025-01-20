@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import pvin.curso.springboot.springbootjpa.dto.PersonDto;
 import pvin.curso.springboot.springbootjpa.entities.Person;
 import pvin.curso.springboot.springbootjpa.repositories.PersonRepository;
 
@@ -16,6 +18,8 @@ import java.util.Scanner;
 public class SpringbootjpaApplication implements CommandLineRunner {
     @Autowired
     private PersonRepository repository;
+    @Autowired
+    private DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringbootjpaApplication.class, args);
@@ -62,7 +66,22 @@ public class SpringbootjpaApplication implements CommandLineRunner {
         System.out.println("---------------- GetName from Person ------------------------");
         personalizedQuery();
 
+        System.out.println("----------------  MixFunction  ------------------------");
+        mixQuery();
+    }
 
+    @Transactional(readOnly = true)
+    public void mixQuery() {
+        List<Object[]> personRegs = repository.findAllMixPersons();
+        personRegs.forEach(reg -> System.out.println(reg[0] + " -> " + reg[1]));
+
+        System.out.println("----------------  Listado de Objetos personalizados  ------------------------");
+        List<Person> personList = repository.findAllPersonsPersonalized();
+        personList.forEach(System.out::println);
+
+        System.out.println("----------------  Listado de Objetos personalizados  ------------------------");
+        List<PersonDto> personDtoList = repository.findAllPersonsPersonalizedWithDto();
+        personDtoList.forEach(p -> System.out.println(p.getName() + " " + p.getLastname()));
     }
 
     @Transactional(readOnly = true)
@@ -164,13 +183,6 @@ public class SpringbootjpaApplication implements CommandLineRunner {
 
     @Transactional(readOnly = true)
     public void findOne(Long id) {
-//        Optional<Person> optionalPerson = repository.findById(id);
-//
-//        if(optionalPerson.isPresent())
-//            System.out.println(optionalPerson.get());
-//        else
-//            System.out.printf("La persona con el ID: %d no se encuentra en el sistema. :c%n", id);
-
         repository.findOne(id).ifPresent(System.out::println);
     }
 }

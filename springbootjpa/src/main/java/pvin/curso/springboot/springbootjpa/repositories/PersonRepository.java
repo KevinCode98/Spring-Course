@@ -2,6 +2,7 @@ package pvin.curso.springboot.springbootjpa.repositories;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import pvin.curso.springboot.springbootjpa.dto.PersonDto;
 import pvin.curso.springboot.springbootjpa.entities.Person;
 
 import java.util.List;
@@ -43,4 +44,13 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 
     @Query("select p.id, p.name, p.lastname, p.programmingLanguage from Person p where p.id=:id")
     Object obtenerPersonaById(Long id);
+
+    @Query("select p, p.programmingLanguage from Person p")
+    List<Object[]> findAllMixPersons();
+
+    @Query("select new Person(p.name, p.lastname) from Person p")
+    List<Person> findAllPersonsPersonalized();
+
+    @Query("select new pvin.curso.springboot.springbootjpa.dto.PersonDto(p.name, p.lastname) from Person p")
+    List<PersonDto> findAllPersonsPersonalizedWithDto();
 }
