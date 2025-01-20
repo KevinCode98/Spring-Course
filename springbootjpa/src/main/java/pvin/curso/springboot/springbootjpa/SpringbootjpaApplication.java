@@ -28,7 +28,36 @@ public class SpringbootjpaApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        getPersonaBetween();
+        querysFunctionAggregation();
+    }
+
+    @Transactional(readOnly = true)
+    public void querysFunctionAggregation() {
+        System.out.println("---------------- Consulta con el total de registros de la tabla persona  ------------------------");
+        Long count = repository.getTotalPersons();
+        Long min = repository.getMinId();
+        Long max = repository.getMaxId();
+
+        System.out.println("Total Persons: " + count);
+        System.out.println("Min Person: " + min);
+        System.out.println("Max Person: " + max);
+
+
+        System.out.println("---------------- Consulta con el nombre y su largo -----------------------");
+        List<Object[]> regs = repository.getPersonNameLength();
+        regs.forEach(reg -> System.out.println(reg[0] + " ->  " + reg[1]));
+
+
+        System.out.println("Menor nombre es: " + repository.getMinLengthName());
+        System.out.println("Mayor nombre es: " + repository.getMaxLengthName());
+
+        System.out.println("---------------- Consultas resumen de funciones de agregacion min, max, sum, avg, count -----------------------");
+        Object[] resumReg = (Object[]) repository.getResumeAggregationFunction();
+        System.out.println("min = " + resumReg[0]);
+        System.out.println("max = " + resumReg[1]);
+        System.out.println("sum = " + resumReg[2]);
+        System.out.println("avg = " + resumReg[3]);
+        System.out.println("count = " + resumReg[4]);
     }
 
     @Transactional(readOnly = true)
@@ -101,9 +130,15 @@ public class SpringbootjpaApplication implements CommandLineRunner {
         System.out.print("Ingresa el caracter end: ");
         String caracterEnd = scanner.next();
 
-        List<Person> personListName = repository.findAllPersonsPersonalizedBetweenByName(caracterStart, caracterEnd);
+        List<Person> personListName = repository.findByNameBetween(caracterStart, caracterEnd);
         personListName.forEach(System.out::println);
         scanner.close();
+
+        System.out.println("----------------  Mostrar todas las personas ------------------------");
+        repository.findAllOrdered().forEach(System.out::println);
+
+        System.out.println("----------------  Mostrar todas las descendente por nombre ------------------------");
+        repository.findAllByOrderByNameDesc().forEach(System.out::println);
     }
 
     @Transactional

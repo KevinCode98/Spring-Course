@@ -21,7 +21,7 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
     @Query("select distinct (p.programmingLanguage) from Person p")
     List<String> findAllProgrammingLanguageDistinct();
 
-//    @Query("select concat(p.name,  ' ', p.lastname) as fullname from Person p where p.id=:id")
+    //    @Query("select concat(p.name,  ' ', p.lastname) as fullname from Person p where p.id=:id")
     @Query("select upper(p.name ||  ' ' || p.lastname) as fullname from Person p where p.id=:id")
     String getFullNameById(Long id);
 
@@ -34,14 +34,8 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
     @Query("select p from Person p where p.name=:name")
     List<Optional<Person>> findOneName(String name);
 
-    List<Person> findByProgrammingLanguage(String language);
-
     @Query("select p from Person p where p.name like %:name% order by p.id asc")
     List<Optional<Person>> findOneLikeName(String name);
-
-    List<Optional<Person>> findByNameContaining(String name);
-
-    List<Person> findByName(String name);
 
     @Query("select p from Person p where p.programmingLanguage=:language and p.name=:name")
     List<Person> buscarByProgrammingLanguage(String language, String name);
@@ -67,9 +61,45 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
     @Query("select new pvin.curso.springboot.springbootjpa.dto.PersonDto(p.name, p.lastname) from Person p")
     List<PersonDto> findAllPersonsPersonalizedWithDto();
 
-    @Query("select p from Person p where p.id between :start and :end")
+    @Query("select p from Person p where p.id between :start and :end order by p.name asc, p.lastname desc")
     List<Person> findAllPersonsPersonalizedBetweenById(Long start, Long end);
 
     @Query("select p from Person p where p.name between :start and :end")
     List<Person> findAllPersonsPersonalizedBetweenByName(String start, String end);
+
+    @Query("select p from Person p order by p.name asc")
+    List<Person> findAllOrdered();
+
+    @Query("select min(length(p.name)) from Person p")
+    Integer getMinLengthName();
+
+    @Query("select max(length(p.name)) from Person p")
+    Integer getMaxLengthName();
+
+    @Query("select count(p) from Person p")
+    Long getTotalPersons();
+
+    @Query("select min(p.id) from Person p")
+    Long getMinId();
+
+    @Query("select max(p.id) from Person p")
+    Long getMaxId();
+
+    @Query("select p.name, length(p.name) from Person p")
+    List<Object[]> getPersonNameLength();
+
+    @Query("select min(p.id), max(p.id), sum(p.id), avg(length(p.name)), count(p.id) from Person p")
+    Object getResumeAggregationFunction();
+
+    List<Person> findByNameBetween(String nameStart, String nameEnd);
+
+    List<Person> findByIdBetweenOrderByNameAsc(Long start, Long end);
+
+    List<Person> findByName(String name);
+
+    List<Optional<Person>> findByNameContaining(String name);
+
+    List<Person> findByProgrammingLanguage(String language);
+
+    List<Person> findAllByOrderByNameDesc();
 }
