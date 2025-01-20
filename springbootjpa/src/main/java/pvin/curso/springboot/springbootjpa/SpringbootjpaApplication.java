@@ -31,9 +31,9 @@ public class SpringbootjpaApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        List<Person> persons = repository.buscarByProgrammingLanguage("C++", "John");
-        List<Object[]> personsValues = repository.obtenerPersonDataByProgrammingLanguageAndName("Daniel", "Python");
-        List<Object[]> namesValues = repository.obtenerPersonDataByName("David");
+        List<Person> persons = repository.buscarByProgrammingLanguage("Java", "Alan");
+        List<Object[]> personsValues = repository.obtenerPersonDataByProgrammingLanguageAndName("Sergio", "Python");
+        List<Object[]> namesValues = repository.obtenerPersonDataByName("Kevin");
         personsValues.sort((a, b) -> compareObject(a, b, 0));
         namesValues.sort((b, a) -> compareObject(a, b, 1));
 
@@ -49,25 +49,43 @@ public class SpringbootjpaApplication implements CommandLineRunner {
         persons.forEach(System.out::println);
 
         System.out.println("--------------------------------------------------");
-        findOne(22L);
+        findOne(1L);
 
         System.out.println("---------------- Using findOne -> sending a String ------------------------");
-        findOne("Daniel");
+        findOne("Kevin");
 
         System.out.println("---------------- Using findByName -> sending a String ------------------------");
-        repository.findByName("Daniel").forEach(System.out::println);
+        repository.findByName("Edgar").forEach(System.out::println);
 
         System.out.println("---------------- Using findOneLikeName -> sending a String ------------------------");
-        repository.findOneLikeName("da").forEach(System.out::println);
+        repository.findOneLikeName("a").forEach(System.out::println);
 
         System.out.println("---------------- Using findByNameContaining -> sending a String ------------------------");
-        repository.findByNameContaining("mi").forEach(System.out::println);
+        repository.findByNameContaining("ser").forEach(System.out::println);
 
         System.out.println("---------------- GetName from Person ------------------------");
         personalizedQuery();
 
         System.out.println("----------------  MixFunction  ------------------------");
         mixQuery();
+
+        allNamesQueryDistinct();
+    }
+
+    @Transactional(readOnly = true)
+    public void allNamesQueryDistinct() {
+        System.out.println("----------------  All Names  ------------------------");
+        List<String> names = repository.findAllNames();
+        names.forEach(System.out::println);
+
+        System.out.println("----------------  All Names Distinct ------------------------");
+        List<String> namesDistinct = repository.findAllNamesDistinct();
+        namesDistinct.forEach(System.out::println);
+
+        long countProgrammingLanguage = repository.countProgrammingLanguage();
+        System.out.printf("----------------  All Languages Distinct: %d ------------------------%n", countProgrammingLanguage);
+        List<String> languages = repository.findAllProgrammingLanguageDistinct();
+        languages.forEach(System.out::println);
     }
 
     @Transactional(readOnly = true)
@@ -79,7 +97,7 @@ public class SpringbootjpaApplication implements CommandLineRunner {
         List<Person> personList = repository.findAllPersonsPersonalized();
         personList.forEach(System.out::println);
 
-        System.out.println("----------------  Listado de Objetos personalizados  ------------------------");
+        System.out.println("----------------  Listado de Objetos personalizados ------------------------");
         List<PersonDto> personDtoList = repository.findAllPersonsPersonalizedWithDto();
         personDtoList.forEach(p -> System.out.println(p.getName() + " " + p.getLastname()));
     }
