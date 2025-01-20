@@ -9,6 +9,7 @@ import pvin.curso.springboot.springbootjpa.dto.PersonDto;
 import pvin.curso.springboot.springbootjpa.entities.Person;
 import pvin.curso.springboot.springbootjpa.repositories.PersonRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -28,7 +29,32 @@ public class SpringbootjpaApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        querysFunctionAggregation();
+        whereIn();
+    }
+
+    @Transactional(readOnly = true)
+    public void whereIn() {
+        System.out.println("---------------- Consulta Where in----------------------");
+        List<Long> ids = List.of(1L, 2L, 4L);
+        List<Person> personList = repository.getPersonsById(ids);
+        personList.forEach(System.out::println);
+    }
+
+    @Transactional(readOnly = true)
+    public void subQuerys() {
+        System.out.println("---------------- Consulta por el nombre mas corto y su largo -----------------------");
+        List<Object[]> register = repository.getShorterName();
+        register.forEach(reg -> {
+            System.out.println(reg[0] + " ==> " + reg[1]);
+        });
+
+        System.out.println("---------------- Obtener el ultimo registro ----------------------");
+        Optional<Person> person = repository.getLastRegisteredPerson();
+        person.ifPresentOrElse(System.out::println, () -> {
+            System.out.println("Usuario no existe");
+        });
+
+
     }
 
     @Transactional(readOnly = true)
