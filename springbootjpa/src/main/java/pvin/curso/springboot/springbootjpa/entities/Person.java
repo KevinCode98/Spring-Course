@@ -2,8 +2,6 @@ package pvin.curso.springboot.springbootjpa.entities;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "persons")
 public class Person {
@@ -19,11 +17,8 @@ public class Person {
     @Column(name = "programming_language")
     private String programmingLanguage;
 
-    @Column(name = "create_at")
-    private LocalDateTime creatAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updateAt;
+    @Embedded
+    private Audit audit = new Audit();
 
     public Person() {
     }
@@ -39,20 +34,6 @@ public class Person {
         this.lastname = lastname;
         this.programmingLanguage = programmingLanguage;
     }
-
-    @PrePersist
-    public void prePersist() {
-        System.out.println("Evento del ciclo de vida del entity pre persist");
-        this.creatAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        System.out.println("Evento del ciclo de vida del entity pre update");
-        this.updateAt = LocalDateTime.now();
-    }
-
-
 
     public Long getId() {
         return id;
@@ -86,13 +67,16 @@ public class Person {
         this.programmingLanguage = programmingLanguage;
     }
 
+
     @Override
     public String toString() {
-        return "{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", programmingLanguage='" + programmingLanguage + '\'' +
-                '}';
+        return "Person{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", lastname='" + lastname + '\'' +
+               ", programmingLanguage='" + programmingLanguage + '\'' +
+               ", created=" + audit.getCreatAt() +
+               ", updated=" + audit.getUpdateAt() +
+               '}';
     }
 }
