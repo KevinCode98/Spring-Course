@@ -63,8 +63,11 @@ public class SpringbootjpaApplication implements CommandLineRunner {
 //        create();
 
 
-        System.out.println("---------------- Update Person ------------------------");
-        update();
+//        System.out.println("---------------- Update Person ------------------------");
+//        update();
+
+//        System.out.println("---------------- Delete Person ------------------------");
+//        delete();
     }
 
     @Transactional
@@ -105,6 +108,40 @@ public class SpringbootjpaApplication implements CommandLineRunner {
         } else {
             System.out.println("El usuario no existe");
         }
+    }
+
+    @Transactional
+    public void delete() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Id del usuario que se quiere eliminar: ");
+        Long id = scanner.nextLong();
+
+        Optional<Person> person = repository.findById(id);
+        if (person.isPresent()) {
+            repository.deleteById(id);
+            System.out.println("Se ha eliminado : " + person.get());
+        } else {
+            System.out.println("El usuario no existe");
+        }
+
+        scanner.close();
+    }
+
+
+    @Transactional
+    public void delete2() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Id del usuario que quiere eliminar: ");
+        Long id = scanner.nextLong();
+
+        Optional<Person> person = repository.findById(id);
+        person.ifPresentOrElse(p -> {
+                    repository.delete(p);
+                    System.out.println("Se ha eliminado : " + p);
+                },
+                () -> System.out.println("El usuario no existe")
+        );
+        scanner.close();
     }
 
     @Transactional(readOnly = true)
