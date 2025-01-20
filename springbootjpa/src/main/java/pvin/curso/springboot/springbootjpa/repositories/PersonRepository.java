@@ -66,4 +66,10 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 
     @Query("select new pvin.curso.springboot.springbootjpa.dto.PersonDto(p.name, p.lastname) from Person p")
     List<PersonDto> findAllPersonsPersonalizedWithDto();
+
+    @Query("select p from Person p where p.id between :start and :end")
+    List<Person> findAllPersonsPersonalizedBetweenById(Long start, Long end);
+
+    @Query("select p from Person p where p.name between :start and :end")
+    List<Person> findAllPersonsPersonalizedBetweenByName(String start, String end);
 }

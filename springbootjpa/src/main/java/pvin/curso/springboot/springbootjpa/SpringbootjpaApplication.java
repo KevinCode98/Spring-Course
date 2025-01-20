@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import pvin.curso.springboot.springbootjpa.dto.PersonDto;
 import pvin.curso.springboot.springbootjpa.entities.Person;
@@ -18,8 +17,6 @@ import java.util.Scanner;
 public class SpringbootjpaApplication implements CommandLineRunner {
     @Autowired
     private PersonRepository repository;
-    @Autowired
-    private DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringbootjpaApplication.class, args);
@@ -31,45 +28,7 @@ public class SpringbootjpaApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        List<Person> persons = repository.buscarByProgrammingLanguage("Java", "Alan");
-        List<Object[]> personsValues = repository.obtenerPersonDataByProgrammingLanguageAndName("Sergio", "Python");
-        List<Object[]> namesValues = repository.obtenerPersonDataByName("Kevin");
-        personsValues.sort((a, b) -> compareObject(a, b, 0));
-        namesValues.sort((b, a) -> compareObject(a, b, 1));
-
-        System.out.println("--------------------------------------------------");
-        for (Object[] person : personsValues)
-            System.out.println(person[0] + " -> " + person[1]);
-
-        System.out.println("--------------------------------------------------");
-        for (Object[] person : namesValues)
-            System.out.println(person[0] + " es experto en " + person[1]);
-
-        System.out.println("--------------------------------------------------");
-        persons.forEach(System.out::println);
-
-        System.out.println("--------------------------------------------------");
-        findOne(1L);
-
-        System.out.println("---------------- Using findOne -> sending a String ------------------------");
-        findOne("Kevin");
-
-        System.out.println("---------------- Using findByName -> sending a String ------------------------");
-        repository.findByName("Edgar").forEach(System.out::println);
-
-        System.out.println("---------------- Using findOneLikeName -> sending a String ------------------------");
-        repository.findOneLikeName("a").forEach(System.out::println);
-
-        System.out.println("---------------- Using findByNameContaining -> sending a String ------------------------");
-        repository.findByNameContaining("ser").forEach(System.out::println);
-
-        System.out.println("---------------- GetName from Person ------------------------");
-        personalizedQuery();
-
-        System.out.println("----------------  MixFunction  ------------------------");
-        mixQuery();
-
-        allNamesQueryDistinct();
+        getPersonaBetween();
     }
 
     @Transactional(readOnly = true)
@@ -117,6 +76,33 @@ public class SpringbootjpaApplication implements CommandLineRunner {
             System.out.println("El usuario no existe");
         }
 
+        scanner.close();
+    }
+
+    @Transactional(readOnly = true)
+    public void getPersonaBetween() {
+        System.out.println("----------------  Obterner lista de usuarios entre dos ID's ------------------------");
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Ingresa el Id start: ");
+        Long start = scanner.nextLong();
+
+        System.out.print("Ingresa el Id end: ");
+        Long end = scanner.nextLong();
+
+        List<Person> personListId = repository.findAllPersonsPersonalizedBetweenById(start, end);
+        personListId.forEach(System.out::println);
+
+        System.out.println("----------------  Obterner lista de usuarios entre dos Caracters - Nombre ------------------------");
+
+        System.out.print("Ingresa el caracter start: ");
+        String caracterStart = scanner.next();
+
+        System.out.print("Ingresa el caracter end: ");
+        String caracterEnd = scanner.next();
+
+        List<Person> personListName = repository.findAllPersonsPersonalizedBetweenByName(caracterStart, caracterEnd);
+        personListName.forEach(System.out::println);
         scanner.close();
     }
 
