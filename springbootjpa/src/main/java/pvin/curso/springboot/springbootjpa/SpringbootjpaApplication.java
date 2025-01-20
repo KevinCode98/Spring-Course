@@ -59,15 +59,28 @@ public class SpringbootjpaApplication implements CommandLineRunner {
         System.out.println("---------------- Using findByNameContaining -> sending a String ------------------------");
         repository.findByNameContaining("mi").forEach(System.out::println);
 
-//        System.out.println("---------------- Creating new Person ------------------------");
-//        create();
+        System.out.println("---------------- GetName from Person ------------------------");
+        personalizedQuery();
 
 
-//        System.out.println("---------------- Update Person ------------------------");
-//        update();
+    }
 
-//        System.out.println("---------------- Delete Person ------------------------");
-//        delete();
+    @Transactional(readOnly = true)
+    public void personalizedQuery() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingresa el Id del usuario para obtener su nombre: ");
+        Long id = scanner.nextLong();
+
+        if (repository.findById(id).isPresent()) {
+            System.out.println(repository.getNameById(id));
+            System.out.println(repository.getFullNameById(id));
+            Object personObj[] = (Object[]) repository.obtenerPersonaById(id);
+            System.out.println(personObj[0] + ".- " + personObj[1] + " " + personObj[2] + " ==> " + personObj[3]);
+        } else {
+            System.out.println("El usuario no existe");
+        }
+
+        scanner.close();
     }
 
     @Transactional
