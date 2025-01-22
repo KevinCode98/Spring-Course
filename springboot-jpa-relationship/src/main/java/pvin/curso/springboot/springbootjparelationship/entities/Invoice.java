@@ -13,7 +13,7 @@ public class Invoice {
     private Long total;
 
     @ManyToOne
-    @JoinColumn(name= "client_id")
+    @JoinColumn(name = "client_id")
     private Client client;
 
     public Long getId() {
@@ -58,11 +58,11 @@ public class Invoice {
 
     @Override
     public String toString() {
-        return "{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                ", total=" + total +
-                ", client=" + client +
-                '}';
+        return "Invoice -> {" +
+               "id=" + id +
+               ", description='" + description + '\'' +
+               ", total=" + total +
+               ", client=" + client +
+               '}';
     }
 }

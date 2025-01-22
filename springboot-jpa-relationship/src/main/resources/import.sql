@@ -1,4 +1,2 @@
-INSERT INTO clients(name, lastname)values ('Kevin', 'Carrillo');
-INSERT INTO clients(name, lastname)values ('Alan', 'Zaragoza');
-INSERT INTO clients(name, lastname)values ('Sergio', 'Malek');
-INSERT INTO clients(name, lastname)values ('Edgar', 'Hernandez');
+insert into clients (name, lastname) values ('Pepe', 'Doe');
+insert into clients (name, lastname) values ('Maria', 'Roe');
