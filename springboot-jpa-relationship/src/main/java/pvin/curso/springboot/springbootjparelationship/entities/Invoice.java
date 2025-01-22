@@ -13,6 +13,7 @@ public class Invoice {
     private Long total;
 
     @ManyToOne
+    @JoinColumn(name= "client_id")
     private Client client;
 
     public Long getId() {
@@ -39,11 +40,18 @@ public class Invoice {
         this.total = total;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     public Invoice() {
     }
 
-    public Invoice(Long id, String description, Long total) {
-        this.id = id;
+    public Invoice(String description, Long total) {
         this.description = description;
         this.total = total;
     }
