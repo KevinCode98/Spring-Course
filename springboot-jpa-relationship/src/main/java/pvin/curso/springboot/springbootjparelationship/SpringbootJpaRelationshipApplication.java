@@ -28,7 +28,53 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        oneToManyFindById();
+        removeAddressFindById();
+    }
+
+    @Transactional
+    public void removeAddressFindById() {
+        Optional<Client> optionalClient = clientRepository.findById(2L);
+
+        optionalClient.ifPresent(client -> {
+            Address firstAddress = new Address("Robert Schummann", 1234);
+            Address secondAddress = new Address("Av. Lazaro Cardenas", 4321);
+
+            client.setAddresses(Arrays.asList(firstAddress, secondAddress));
+            clientRepository.save(client);
+
+            System.out.println(client);
+
+            // Buscando el cliente para eliminar una direccion
+            Optional<Client> optClient = clientRepository.findOne(2L);
+            optClient.ifPresent(existingClient -> {
+                Address auxAddress = existingClient.getAddresses().get(1);
+                existingClient.getAddresses().remove(auxAddress);
+                clientRepository.save(existingClient);
+                System.out.println(existingClient);
+            });
+        });
+    }
+
+    @Transactional
+    public void removeAddress() {
+        // Creando un usuario
+        Client client = new Client("Yadira", "Ruiz");
+        Address firstAddress = new Address("Av. Pablo Neruda", 1234);
+        Address secondAddress = new Address("Av. Patria", 4321);
+
+        client.getAddresses().add(firstAddress);
+        client.getAddresses().add(secondAddress);
+
+        clientRepository.save(client);
+        System.out.println(client);
+
+        // Buscando el cliente para eliminar una direccion
+        Optional<Client> optionalClient = clientRepository.findById(3L);
+        optionalClient.ifPresent((existingClient) -> {
+            existingClient.getAddresses().remove(firstAddress);
+            clientRepository.save(existingClient);
+            System.out.println(existingClient);
+        });
     }
 
     @Transactional
