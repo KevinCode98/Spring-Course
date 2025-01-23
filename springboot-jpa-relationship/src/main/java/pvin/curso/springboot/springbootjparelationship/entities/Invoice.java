@@ -3,11 +3,11 @@ package pvin.curso.springboot.springbootjparelationship.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @ToString
+@NoArgsConstructor
 @Table(name = "invoices")
 public class Invoice {
     @Id
