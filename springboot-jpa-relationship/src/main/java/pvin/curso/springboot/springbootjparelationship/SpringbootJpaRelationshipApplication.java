@@ -32,6 +32,20 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
     }
 
     @Transactional
+    public void oneToManyInvoiceBidireccional() {
+        Client client = new Client("Max", "Valencia");
+
+        Invoice computadora = new Invoice("Computadora", 3500L);
+        Invoice teclado = new Invoice("Teclado", 500L);
+        Invoice mouse = new Invoice("Mouse", 200L);
+
+        client.addInvoice(computadora).addInvoice(teclado).addInvoice(mouse);
+
+        clientRepository.save(client);
+        System.out.println(client);
+    }
+
+    @Transactional
     public void removeAddressFindById() {
         Optional<Client> optionalClient = clientRepository.findById(2L);
 

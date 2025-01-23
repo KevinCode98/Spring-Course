@@ -1,11 +1,17 @@
 package pvin.curso.springboot.springbootjparelationship.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
+@ToString
 @Table(name = "clients")
 public class Client {
     @Id
@@ -15,7 +21,7 @@ public class Client {
     private String name;
     private String lastname;
 
-    //    @JoinColumn(name = "client_id")
+//        @JoinColumn(name = "client_id")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
             name = "tbl_clientes_to_direcciones",
@@ -25,36 +31,17 @@ public class Client {
     )
     private List<Address> addresses;
 
-    public Long getId() {
-        return id;
-    }
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "client"
+    )
+    @ToString.Exclude
+    private List<Invoice> invoices;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
+    public Client() {
+        addresses = new ArrayList<>();
+        invoices = new ArrayList<>();
     }
 
     public Client(String name, String lastname) {
@@ -63,17 +50,10 @@ public class Client {
         this.lastname = lastname;
     }
 
-    public Client() {
-        addresses = new ArrayList<>();
-    }
+    public Client addInvoice(Invoice invoice) {
+        invoices.add(invoice);
+        invoice.setClient(this);
 
-    @Override
-    public String toString() {
-        return "Client -> {" +
-               "id=" + id +
-               ", name='" + name + '\'' +
-               ", lastname='" + lastname + '\'' +
-               ", addresses=" + addresses +
-               '}';
+        return this;
     }
 }
