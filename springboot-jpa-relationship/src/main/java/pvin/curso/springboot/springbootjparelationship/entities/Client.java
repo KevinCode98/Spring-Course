@@ -13,11 +13,7 @@ import java.util.Set;
 @Entity
 @ToString
 @Table(name = "clients")
-public class Client {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Client  extends BaseEntity{
     private String name;
     private String lastname;
 
