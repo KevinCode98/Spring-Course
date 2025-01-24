@@ -36,7 +36,23 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        manyToManyRemoveFind();
+        manyToManyBidirectional();
+    }
+
+    @Transactional
+    public void manyToManyBidirectional() {
+        Student firstStudent = new Student("Sergio", "Malek");
+        Student secondStudent = new Student("Alan", "Zaragoza");
+
+        Course firstCourse = new Course("Spring Boot 6", "Guru");
+        Course secondCourse = new Course("Testing - Spring Boot", "Andres");
+
+        firstStudent.addCourse(firstCourse).addCourse(secondCourse);
+        secondStudent.addCourse(secondCourse);
+
+        studentRepository.saveAll(Arrays.asList(firstStudent, secondStudent));
+        System.out.println(firstStudent);
+        System.out.println(secondStudent);
     }
 
     @Transactional

@@ -20,8 +20,8 @@ public class Course extends BaseEntity {
     private String name;
     private String instructor;
 
-    @ManyToMany
     @ToString.Exclude
+    @ManyToMany(mappedBy = "courses")
     private Set<Student> students;
 
     public Course() {
