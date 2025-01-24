@@ -6,10 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 import pvin.curso.springboot.springbootjparelationship.entities.*;
-import pvin.curso.springboot.springbootjparelationship.repositories.ClientDetailsRepository;
-import pvin.curso.springboot.springbootjparelationship.repositories.ClientRepository;
-import pvin.curso.springboot.springbootjparelationship.repositories.InvoiceRepository;
-import pvin.curso.springboot.springbootjparelationship.repositories.StudentRepository;
+import pvin.curso.springboot.springbootjparelationship.repositories.*;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,13 +27,90 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private CoursesRepository coursesRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(SpringbootJpaRelationshipApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-        manyToMany();
+        manyToManyRemoveFind();
+    }
+
+    @Transactional
+    public void manyToManyRemoveFind() {
+        Student firstStudent = new Student("Sergio", "Malek");
+        Student secondStudent = new Student("Alan", "Zaragoza");
+        studentRepository.saveAll(Arrays.asList(firstStudent, secondStudent));
+        Course firstCourse = new Course("Spring Boot 6", "Guru");
+        Course secondCourse = new Course("Testing - Spring Boot", "Andres");
+        coursesRepository.saveAll(Arrays.asList(firstCourse, secondCourse));
+
+        Optional<Student> optFirstStudent = studentRepository.findOneWithCourses(1L);
+        Optional<Student> optSecondStudent = studentRepository.findOneWithCourses(2L);
+
+        optFirstStudent.ifPresent(student -> {
+            Course courseSpring = coursesRepository.findById(1L).get();
+            Course courseTesting = coursesRepository.findById(2L).get();
+            student.setCourses(Set.of(courseSpring, courseTesting));
+
+            System.out.println("First student: " + student);
+        });
+
+        optSecondStudent.ifPresent(student -> {
+            Course courseTesting = coursesRepository.findById(2L).get();
+            student.setCourses(Set.of(courseTesting));
+            studentRepository.save(student);
+
+            System.out.println("Second student: " + student);
+        });
+
+
+        Optional<Student> optStudent = studentRepository.findOneWithCourses(1L);
+        optStudent.ifPresent(student -> {
+            Optional<Course> optCourse = coursesRepository.findById(2L);
+            optCourse.ifPresent(course -> {
+                Course auxCourse = new Course(course.getName(), course.getInstructor());
+
+                student.getCourses().remove(auxCourse);
+                studentRepository.save(student);
+
+                System.out.println("Delete course: " + student);
+            });
+        });
+    }
+
+    @Transactional
+    public void manyToManyFind() {
+        Student firstStudent = new Student("Sergio", "Malek");
+        Student secondStudent = new Student("Alan", "Zaragoza");
+        studentRepository.saveAll(Arrays.asList(firstStudent, secondStudent));
+        Course firstCourse = new Course("Spring Boot 6", "Guru");
+        Course secondCourse = new Course("Testing - Spring Boot", "Andres");
+        coursesRepository.saveAll(Arrays.asList(firstCourse, secondCourse));
+
+
+        Optional<Student> optFirstStudent = studentRepository.findById(1L);
+        Optional<Student> optSecondStudent = studentRepository.findById(2L);
+
+        optFirstStudent.ifPresent(student -> {
+            Course courseSpring = coursesRepository.findById(1L).get();
+            Course courseTesting = coursesRepository.findById(2L).get();
+            student.setCourses(Set.of(courseSpring, courseTesting));
+            studentRepository.save(student);
+
+            System.out.println("First student: " + student);
+        });
+
+        optSecondStudent.ifPresent(student -> {
+            Course courseTesting = coursesRepository.findById(2L).get();
+            student.setCourses(Set.of(courseTesting));
+            studentRepository.save(student);
+
+            System.out.println("Second student: " + student);
+        });
     }
 
     @Transactional

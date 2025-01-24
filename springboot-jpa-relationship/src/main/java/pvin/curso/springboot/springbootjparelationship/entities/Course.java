@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -31,5 +32,17 @@ public class Course extends BaseEntity {
         this();
         this.name = name;
         this.instructor = instructor;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return Objects.equals(name, course.name) && Objects.equals(instructor, course.instructor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, instructor);
     }
 }
