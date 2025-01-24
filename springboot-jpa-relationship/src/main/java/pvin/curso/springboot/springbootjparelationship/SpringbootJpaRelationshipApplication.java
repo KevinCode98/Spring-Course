@@ -1,10 +1,10 @@
 package pvin.curso.springboot.springbootjparelationship;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.transaction.annotation.Transactional;
 import pvin.curso.springboot.springbootjparelationship.entities.*;
 import pvin.curso.springboot.springbootjparelationship.repositories.*;
 
@@ -36,7 +36,6 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        manyToManyBidirectional();
     }
 
     @Transactional
