@@ -13,11 +13,11 @@ import java.util.Set;
 @Entity
 @ToString
 @Table(name = "clients")
-public class Client  extends BaseEntity{
+public class Client extends BaseEntity {
     private String name;
     private String lastname;
 
-//        @JoinColumn(name = "client_id")
+    //        @JoinColumn(name = "client_id")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
             name = "tbl_clientes_to_direcciones",
@@ -33,6 +33,14 @@ public class Client  extends BaseEntity{
             mappedBy = "client"
     )
     private Set<Invoice> invoices;
+
+    @OneToOne(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "client"
+    )
+    private ClientDetails clientDetails;
 
     public Client() {
         addresses = new HashSet<>();
@@ -50,5 +58,20 @@ public class Client  extends BaseEntity{
         invoice.setClient(this);
 
         return this;
+    }
+
+    public void removeInvoice(Invoice invoice) {
+        this.getInvoices().remove(invoice);
+        invoice.setClient(null);
+    }
+
+    public void addClientDetails(ClientDetails clientDetails) {
+        this.clientDetails = clientDetails;
+        clientDetails.setClient(this);
+    }
+
+    public void removeClientDetails(ClientDetails clientDetails) {
+        clientDetails.setClient(null);
+        this.clientDetails = null;
     }
 }

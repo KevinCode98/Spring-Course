@@ -1,20 +1,19 @@
 package pvin.curso.springboot.springbootjparelationship.entities;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
-@EqualsAndHashCode
 @ToString
+@NoArgsConstructor
 @Table(name = "addresses")
-public class Address {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Address extends BaseEntity {
     private String street;
     private Integer number;
 

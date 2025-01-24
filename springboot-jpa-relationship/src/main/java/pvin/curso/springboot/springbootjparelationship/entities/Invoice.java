@@ -1,24 +1,24 @@
 package pvin.curso.springboot.springbootjparelationship.entities;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Objects;
+
 
 @Getter
 @Setter
 @Entity
-@ToString
 @NoArgsConstructor
+@ToString
 @Table(name = "invoices")
-public class Invoice {
-    private static final Long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
-
-
+public class Invoice extends BaseEntity {
     private String description;
     private Long total;
 
@@ -34,14 +34,13 @@ public class Invoice {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Invoice invoice = (Invoice) o;
-        return Objects.equals(description, invoice.description) && Objects.equals(total, invoice.total) && Objects.equals(client, invoice.client);
+        return Objects.equals(description, invoice.description) && Objects.equals(total, invoice.total);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(description, total, client);
+        return Objects.hash(description, total);
     }
 }

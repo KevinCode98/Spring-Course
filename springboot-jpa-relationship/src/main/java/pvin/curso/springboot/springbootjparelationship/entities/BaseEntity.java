@@ -1,29 +1,29 @@
 package pvin.curso.springboot.springbootjparelationship.entities;
 
-import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.security.Timestamp;
+import lombok.ToString;
 
 @Getter
 @Setter
-@SuperBuilder
 @MappedSuperclass
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class BaseEntity {
+public abstract class BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    @ToString.Exclude
+    protected Long id;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private Timestamp createdDate;
+    public boolean isNew() {
+        return this.id == null;
+    }
 
-    @UpdateTimestamp
-    private Timestamp lastModifiedDate;
+    public BaseEntity() {
+    }
+
+    public BaseEntity(Long id) {
+        this.id = id;
+    }
 }
