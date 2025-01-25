@@ -1,3 +1,5 @@
+package com.pvin.curso.springboot.di.factura;
+
 import com.pvin.curso.springboot.di.factura.models.Item;
 import com.pvin.curso.springboot.di.factura.models.Product;
 import org.springframework.context.annotation.Bean;
