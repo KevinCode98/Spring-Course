@@ -13,7 +13,7 @@ public class InvoiceController {
     private Invoice invoice;
 
     @GetMapping("/show")
-    public Invoice show(){
+    public Invoice show() {
         return invoice;
     }
 }
