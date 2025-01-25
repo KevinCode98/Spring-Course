@@ -1,5 +1,7 @@
 package com.pvin.curso.springboot.di.factura.models;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +20,19 @@ public class Invoice {
     @Autowired
     @Qualifier("default")
     private List<Item> items;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("Creando el componentede la factura");
+        client.setName(client.getName().toUpperCase());
+        description = description.concat(" el cliente: ").concat(client.getName());
+    }
+
+    @PreDestroy
+    public void destroy() {
+        System.out.println("I NO FUIMOOOOO! x__x");
+
+    }
 
     public Client getClient() {
         return client;
